@@ -10,7 +10,13 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Contacts Management", version = "1.0", contact = @Contact(name = "Siva Malleswar Reddy", email = "yedugurisiva121@gmail.com", url = "www.linkedin.com/in/yeduguri-reddy"), description = "We'll build a robust and scalable backend for a Contacts Management Application using Spring Boot. This API will provide RESTful endpoints to handle CRUD operations, contact merging, and user authentication."))
+@OpenAPIDefinition(
+    info = @Info(
+        title = "Contacts Management",
+        version = "1.0",
+        description = "A robust and scalable backend for a Contacts Management Application using Spring Boot. This API provides RESTful endpoints for CRUD operations, contact merging, and user authentication."
+    )
+)
 @EnableCaching
 @EnableJpaAuditing
 public class ContactsManagementApiApplication {
