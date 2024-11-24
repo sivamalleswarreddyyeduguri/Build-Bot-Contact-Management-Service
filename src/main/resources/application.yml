@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: contacts-management-api
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/Build_Bot_Contacts_Management
+    username: postgres
+    password: ENC(c1prSVTTiacYmrdsgY7p4Aotq6BJgmkctR3+V6QX5FYrwFjAMWNVxmp3/r31T/+6)
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: metrics\
+
+logging:
+  file:
+    name: logs/app.log
+    path: logs
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n'
+
+springdoc:
+  swagger-ui:
+    path: /swagger.html
