@@ -1,0 +1,251 @@
+openapi: 3.0.0
+info:
+  title: Contacts Management API
+  version: "1.0"
+  description: APIs for managing contacts
+tags:
+  - name: Contacts Management APIs
+    description: APIs to perform various operations on contacts
+paths:
+  /app/contacts-management/api/v1/create-contact:
+    post:
+      tags:
+        - Contacts Management APIs
+      summary: Create a new contact
+      description: Creates a new contact with the provided details
+      operationId: createNewContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDto'
+      responses:
+        '201':
+          description: Contact successfully created
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /app/contacts-management/api/v1/update-contact/{contactId}:
+    put:
+      tags:
+        - Contacts Management APIs
+      summary: Update an existing contact
+      description: Updates the details of an existing contact
+      operationId: updateContact
+      parameters:
+        - in: path
+          name: contactId
+          required: true
+          schema:
+            type: string
+          description: ID of the contact to update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDto'
+      responses:
+        '200':
+          description: Contact successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactResponseDto'
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /app/contacts-management/api/v1/fetchByField:
+    get:
+      tags:
+        - Contacts Management APIs
+      summary: Fetch contacts by field
+      description: Fetches contacts by phone number or email, or retrieves all contacts if no parameters are provided
+      operationId: fetchByRequiredField
+      parameters:
+        - in: query
+          name: phoneNo
+          required: false
+          schema:
+            type: string
+          description: Phone number to filter by
+        - in: query
+          name: email
+          required: false
+          schema:
+            type: string
+          description: Email to filter by
+      responses:
+        '200':
+          description: Contacts successfully fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactResponseDto'
+        '404':
+          description: No contacts found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /app/contacts-management/api/v1/delete-contact:
+    delete:
+      tags:
+        - Contacts Management APIs
+      summary: Delete a contact
+      description: Deletes a contact by its ID
+      operationId: deleteContact
+      parameters:
+        - in: query
+          name: contactId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the contact to delete
+      responses:
+        '200':
+          description: Contact successfully deleted
+        '404':
+          description: Contact not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+  /app/contacts-management/api/v1/merge-contacts:
+    post:
+      tags:
+        - Contacts Management APIs
+      summary: Merge contact
+      description: Merge the duplicate contact
+      operationId: mergeContacts
+      parameters:
+        - in: query
+          name: primaryContactId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID of the primary contact
+        - in: query
+          name: duplicateContactIds
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+          description: List of duplicate contact IDs
+      responses:
+        '200':
+          description: Contacts successfully merged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactResponseDto'
+        '404':
+          description: Contacts not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDto'
+
+components:
+  schemas:
+    ContactDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNo:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - email
+        - phoneNo
+
+    ContactResponseDto:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNo:
+          type: string
+
+    ErrorResponseDto:
+      type: object
+      properties:
+        apiPath:
+          type: string
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+        errorTime:
+          type: string
+          format: date-time
+
+    ResponseDto:
+      type: object
+      properties:
+        statusCode:
+          type: string
+        statusMsg:
+          type: string
